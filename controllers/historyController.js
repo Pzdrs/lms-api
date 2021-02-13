@@ -1,6 +1,7 @@
 const History = require('../models/History');
 const Book = require('../models/Book');
 const User = require('../models/User');
+const Author = require('../models/Author');
 
 // Get all the history
 exports.history_get = async (req, res) => {
@@ -26,11 +27,18 @@ exports.history_details_get = async (req, res) => {
 exports.history_details_extended_get = async (req, res) => {
     try {
         const bookHistory = await History.findOne({_id: req.params.id});
+        const book = await Book.findOne({_id: bookHistory.book});
         const history = {
             _id: bookHistory._id,
-            date: bookHistory.date,
-            user: await User.findOne({_id: bookHistory.user}),
-            book: await Book.findOne({_id: bookHistory.book})
+            user: bookHistory.user,
+            book: {
+                title: book.title,
+                writtenIn: book.writtenIn,
+                pageCount: book.pageCount,
+                isbn: book.isbn,
+                author: await Author.findOne({_id: book.author}),
+                date: bookHistory.date
+            }
         }
         res.status(200).json({success: true, history});
     } catch (err) {
@@ -40,32 +48,19 @@ exports.history_details_extended_get = async (req, res) => {
 
 // Create a history
 exports.history_post = async (req, res) => {
-    // Is the provided book id valid
-    const bookExists = await Book.find({_id: req.body.book});
-    if (!bookExists) return res.status(400).json({success: false, message: 'Invalid book'})
-
-    // Does the provided user exists
-    const userExists = await User.find({user: req.body.user});
-    if (!userExists) return res.status(400).json({success: false, message: 'Invalid user'})
-
-    // Are dates valid
-    const difference = req.body.date.to - req.body.date.from;
-    if (difference <= 0) return res.status(400).json({success: false, message: 'Invalid dates'});
-
-    const schema = History({
+    await History.create({
         book: req.body.book,
         user: req.body.user,
         date: {
-            from: req.body.date.from,
-            to: req.body.date.to
+            to: new Date(req.body.to * 1000)
         }
-    });
-    try {
-        const history = await schema.save();
-        res.status(200).json({success: true, history});
-    } catch (err) {
-        res.status(500).json({success: false, message: err.message});
-    }
+    })
+        .then(history => {
+            res.status(200).json({success: true, history});
+        })
+        .catch(err => {
+            res.status(500).json({success: false, err});
+        });
 };
 
 // Update a history

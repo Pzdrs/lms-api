@@ -30,4 +30,5 @@ const schema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId
     }
 });
+
 module.exports = mongoose.model('RefreshToken', schema);

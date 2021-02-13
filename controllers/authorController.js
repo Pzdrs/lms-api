@@ -49,7 +49,7 @@ exports.author_patch = async (req, res) => {
 // Delete author
 exports.author_delete = async (req, res) => {
     try {
-        const author = await Author.findOneAndDelete(req.params.id);
+        const author = await Author.findByIdAndDelete(req.params.id);
         res.status(200).json({success: true, author});
     } catch (err) {
         res.status(500).json({success: false, message: err.message});

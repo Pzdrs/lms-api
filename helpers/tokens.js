@@ -4,7 +4,7 @@ const moment = require('moment');
 const RefreshToken = require('../models/RefreshToken');
 
 function createToken(id) {
-    return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: '1m'});
+    return jwt.sign({id, ttl: 3600}, process.env.JWT_SECRET, {expiresIn: '1h'});
 }
 
 async function createRefreshToken(req, id) {
@@ -18,7 +18,7 @@ async function createRefreshToken(req, id) {
         });
         return savedToken.value;
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return null;
     }
 }

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/authorController');
+const {requireLoggedIn} = require('../../middleware/authentication');
+
 
 // Get all authors
 router.get('/', controller.authors_get);
@@ -10,12 +12,12 @@ router.get('/', controller.authors_get);
 router.get('/:id', controller.author_get);
 
 // Crete author
-router.post('/', controller.author_post);
+router.post('/', requireLoggedIn, controller.author_post);
 
 // Update author
-router.patch('/:id', controller.author_patch);
+router.patch('/:id', requireLoggedIn, controller.author_patch);
 
 // Delete author
-router.delete('/:id', controller.author_delete);
+router.delete('/:id', requireLoggedIn, controller.author_delete);
 
 module.exports = router;

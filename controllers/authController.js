@@ -3,11 +3,14 @@ const User = require('../models/User');
 const RefreshToken = require('../models/RefreshToken');
 const {createToken, createRefreshToken} = require('../helpers/tokens');
 
-// Revoke a refresh token
-exports.revoke_refresh_token = async (req, res) => {
-    // Is refresh token cookie present?
-    //if (!req.cookies.refresh_token) res.status(400).json({success: false, message: 'Refresh token not found.'})
+exports.loggedIn = (req, res) => {
+    res.status(200).json({loggedIn: true});
+};
 
+exports.forgot_password = async (req, res) => {
+    const user = await User.findOne({email: req.body.email});
+    if (user) return res.status(200).json(user);
+    return res.status(404).json({success: false, message: 'User not found.'});
 };
 
 // Create new access token
@@ -37,6 +40,9 @@ exports.refresh_token = async (req, res) => {
 // Create user
 exports.signup = async (req, res) => {
     // Create a new user
+    const user = await User.findOne({username: req.body.username});
+    console.log(user)
+    if (user) return res.status(409).json({success: false, message: 'This username is not available.'})
     await User.create({
         username: req.body.username,
         password: req.body.password,
@@ -68,4 +74,37 @@ exports.login = async (req, res) => {
             token: createToken(user.id),
             user
         });
-}
+};
+
+// Log out user
+exports.logout = async (req, res) => {
+    if (!req.cookies.refresh_token) return res.status(400).json({success: false, message: 'Refresh token not found.'});
+    try {
+        res.status(200)
+            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true})
+            .json({
+                success: true,
+                message: 'Successfully logged out.'
+            });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({success: false, message: 'Could not log you out.'});
+    }
+};
+
+exports.logoutAll = async (req, res) => {
+    if (!req.cookies.refresh_token) return res.status(400).json({success: false, message: 'Refresh token not found.'});
+    try {
+        const tokens = await RefreshToken.deleteMany({user: req.params.user});
+        res.status(200)
+            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true})
+            .json({
+                success: true,
+                message: `Successfully logged out ${tokens.length} devices.`
+            });
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({success: false, message: 'Could not log you out.'});
+    }
+};
+

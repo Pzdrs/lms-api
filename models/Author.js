@@ -13,8 +13,7 @@ const schema = mongoose.Schema({
         required: true
     },
     died: {
-        type: Date,
-        required: true
+        type: Date
     },
     createdAt: {
         type: Date,

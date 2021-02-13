@@ -13,6 +13,28 @@ exports.get_books = async (req, res) => {
         });
 };
 
+exports.get_books_extended = async (req, res) => {
+    try {
+        const books = await Book.find();
+        let result = []
+        for (const book of books) {
+            const author = await Author.findById(book['author'])
+            result.push({
+                _id: book['_id'],
+                title: book.title,
+                author,
+                isbn: book.isbn,
+                pageCount: book.pageCount,
+                writtenIn: book.writtenIn,
+                createdAt: book.createdAt
+            })
+        }
+        res.status(200).json({success: true, count: books.length, books: result});
+    } catch (err) {
+        res.status(500).json({success: false, message: err.message});
+    }
+};
+
 // Get book by id
 exports.get_book = async (req, res) => {
     await Book.findOne({_id: req.params.id})
