@@ -37,8 +37,9 @@ exports.history_details_extended_get = async (req, res) => {
                 pageCount: book.pageCount,
                 isbn: book.isbn,
                 author: await Author.findOne({_id: book.author}),
-                date: bookHistory.date
-            }
+            },
+            date: bookHistory.date,
+            returned: bookHistory.returned
         }
         res.status(200).json({success: true, history});
     } catch (err) {
