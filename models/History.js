@@ -8,6 +8,10 @@ const schema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, // User id
         required: true
     },
+    returned: {
+        type: Boolean,
+        default: false
+    },
     date: {
         from: {
             type: Date,
