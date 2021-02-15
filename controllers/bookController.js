@@ -19,14 +19,17 @@ exports.get_books_extended = async (req, res) => {
         let result = []
         for (const book of books) {
             const author = await Author.findById(book['author'])
+            const returned = (await History.find({book: book._id, returned: false})).length > 0;
+            console.log(returned)
             result.push({
-                _id: book['_id'],
+                _id: book._id,
                 title: book.title,
                 author,
                 isbn: book.isbn,
                 pageCount: book.pageCount,
                 writtenIn: book.writtenIn,
-                createdAt: book.createdAt
+                createdAt: book.createdAt,
+                returned: !returned
             })
         }
         res.status(200).json({success: true, count: books.length, books: result});
