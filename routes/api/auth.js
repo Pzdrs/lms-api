@@ -9,7 +9,9 @@ router.get('', requireLoggedIn, controller.loggedIn);
 // Create new access token
 router.get('/refresh_token', controller.refresh_token);
 
-router.post('/forgotPass', controller.forgot_password)
+router.post('/forgot', controller.forgot_password)
+
+router.patch('/reset', controller.reset_password)
 
 // Create user
 router.post('/signup', signup, controller.signup);

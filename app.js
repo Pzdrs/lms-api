@@ -4,7 +4,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const logger = require('morgan');
+const morgan = require('morgan');
 
 require('dotenv').config();
 
@@ -29,7 +29,7 @@ mongoose.connect(process.env.MONGO_CONNECT, {
 // Middleware
 app.use(cors({origin: true, credentials: true}));
 app.use(cookieParser());
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'));

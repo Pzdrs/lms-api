@@ -1,16 +1,13 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const RefreshToken = require('../models/RefreshToken');
+const PasswordResetToken = require('../models/PasswordResetToken');
 const {createToken, createRefreshToken} = require('../helpers/tokens');
+const {sendPassResetEmail} = require('../helpers/mail');
+const {nanoid} = require('nanoid');
 
 exports.loggedIn = (req, res) => {
     res.status(200).json({loggedIn: true});
-};
-
-exports.forgot_password = async (req, res) => {
-    const user = await User.findOne({email: req.body.email});
-    if (user) return res.status(200).json(user);
-    return res.status(404).json({success: false, message: 'User not found.'});
 };
 
 // Create new access token
@@ -106,5 +103,40 @@ exports.logoutAll = async (req, res) => {
         console.log(err)
         res.status(500).json({success: false, message: 'Could not log you out.'});
     }
+};
+
+exports.forgot_password = async (req, res) => {
+    try {
+        const user = await User.findOne({email: req.body.email});
+        if (user) {
+            await PasswordResetToken.deleteMany({email: req.body.email});
+            const token = nanoid(64);
+            await PasswordResetToken.create({
+                value: token,
+                email: req.body.email
+            });
+            sendPassResetEmail(req.body.email, token);
+        }
+    } catch (err) {
+        res.status(500).json({success: false, message: err})
+    }
+    res.status(200).json({success: true, message: `Email has been sent to ${req.body.email}.`})
+};
+
+exports.reset_password = async (req, res) => {
+    try {
+        const token = await PasswordResetToken.findOne({value: req.body.token});
+        if (token) {
+            await PasswordResetToken.findByIdAndDelete(token._id);
+            let user = await User.findOne({email: token.email});
+            user.password = req.body.password;
+            await user.save();
+        } else {
+            return res.status(500).json({success: false, message: 'Invalid reset token.'})
+        }
+    } catch (err) {
+        console.error(err);
+    }
+    res.status(200).json({success: true, message: 'Successfully changed password.'})
 };
 

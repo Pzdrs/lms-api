@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const {nanoid} = require('nanoid');
 const moment = require('moment');
 const RefreshToken = require('../models/RefreshToken');
 
@@ -8,7 +9,8 @@ function createToken(id) {
 }
 
 async function createRefreshToken(req, id) {
-    const token = crypto.randomBytes(64).toString('base64');
+    //const token = crypto.randomBytes(64).toString('base64');
+    const token = nanoid(64);
     try {
         const savedToken = await RefreshToken.create({
             value: token,

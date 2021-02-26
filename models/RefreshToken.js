@@ -14,7 +14,8 @@ const schema = mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
+        expires: 604800
     },
     createdByIp: {
         type: String,

@@ -20,7 +20,6 @@ exports.get_books_extended = async (req, res) => {
         for (const book of books) {
             const author = await Author.findById(book['author'])
             const returned = (await History.find({book: book._id, returned: false})).length > 0;
-            console.log(returned)
             result.push({
                 _id: book._id,
                 title: book.title,
