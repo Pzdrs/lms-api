@@ -1,0 +1,809 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Library Management System API",
+    "description": "API for the Library Management System",
+    "contact": {
+      "name": "Petr Boháč",
+      "email": "petrbohac3@seznam.cz"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3000",
+      "description": "Local host API server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Authentication related endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "User related endpoints - Administrators only"
+    },
+    {
+      "name": "Books",
+      "description": "Book related endpoints"
+    },
+    {
+      "name": "Authors",
+      "description": "Author related endpoints"
+    },
+    {
+      "name": "History",
+      "description": "History related endpoints"
+    }
+  ],
+  "paths": {
+    "/statistics": {
+      "get": {
+        "description": "System statistics for dashboards",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Login",
+        "responses": {
+          "200": {
+            "description": "Successfully logged in"
+          },
+          "401": {
+            "description": "Nonexistent user or invalid password"
+          }
+        }
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Sign up",
+        "responses": {
+          "200": {
+            "description": "Successfully created a new user"
+          },
+          "409": {
+            "description": "An error has occurred while trying to create a new user"
+          }
+        }
+      }
+    },
+    "/auth/forgot": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Forgot password - sends emails",
+        "responses": {
+          "200": {
+            "description": "Email has been sent"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/refresh_token": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Exchange a refresh token for a new access token",
+        "responses": {
+          "200": {
+            "description": "Successfully created a new access token"
+          },
+          "400": {
+            "description": "Refresh token not found or has expired"
+          },
+          "410": {
+            "description": "Refresh token invalid"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Log out",
+        "responses": {
+          "200": {
+            "description": "Successfully logged out"
+          },
+          "400": {
+            "description": "Refresh token not found or has expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/logoutAll/{user}": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Log out on all devices",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "description": "User's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully logged out on all devices"
+          },
+          "400": {
+            "description": "Refresh token not found or has expired"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/auth/reset": {
+      "patch": {
+        "tags": [
+          "Authentication"
+        ],
+        "description": "Password resetting",
+        "responses": {
+          "200": {
+            "description": "Password has been successfully reset"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get all users",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/{user}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get a specific user",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "description": "User's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Delete a specific user",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "description": "User's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Update a specific user's data",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "path",
+            "description": "User's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/books": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Get all books",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Get all books",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/books/{book}": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Get a specific book",
+        "parameters": [
+          {
+            "name": "book",
+            "in": "path",
+            "description": "Book's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Delete a specific book",
+        "parameters": [
+          {
+            "name": "book",
+            "in": "path",
+            "description": "Book's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Create a new book",
+        "parameters": [
+          {
+            "name": "book",
+            "in": "path",
+            "description": "Book's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/books/{book}/extended": {
+      "get": {
+        "tags": [
+          "Books"
+        ],
+        "description": "Get a specific book with extra data",
+        "parameters": [
+          {
+            "name": "book",
+            "in": "path",
+            "description": "Book's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/authors": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "description": "Get all authors",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "description": "Create a new author",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/authors/{author}": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "description": "Get a specific author",
+        "parameters": [
+          {
+            "name": "author",
+            "in": "path",
+            "description": "Author's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Authors"
+        ],
+        "description": "Delete a specific author",
+        "parameters": [
+          {
+            "name": "author",
+            "in": "path",
+            "description": "Author's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Authors"
+        ],
+        "description": "Update a specific author",
+        "parameters": [
+          {
+            "name": "author",
+            "in": "path",
+            "description": "Author's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/history": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "description": "Get all history",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "History"
+        ],
+        "description": "Create a new history",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid book/user/date"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/history/{history}": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "description": "Get a specific history",
+        "parameters": [
+          {
+            "name": "history",
+            "in": "path",
+            "description": "History's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "History"
+        ],
+        "description": "Delete a specific history",
+        "parameters": [
+          {
+            "name": "history",
+            "in": "path",
+            "description": "History's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "History"
+        ],
+        "description": "Update a specific history",
+        "parameters": [
+          {
+            "name": "history",
+            "in": "path",
+            "description": "History's id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "isbn": {
+            "type": "string"
+          },
+          "pageCount": {
+            "type": "number"
+          },
+          "author": {
+            "type": "string"
+          },
+          "writtenIn": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "description": "Book model"
+      },
+      "User": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "default": false
+          },
+          "registeredAt": {
+            "type": "string"
+          }
+        },
+        "description": "User model"
+      },
+      "Author": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "born": {
+            "type": "string"
+          },
+          "died": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "description": "Author model"
+      },
+      "History": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "book": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "date": {
+            "$ref": "#/components/schemas/History_date"
+          }
+        },
+        "description": "History model"
+      },
+      "RefreshToken": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "expires": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "createdByIp": {
+            "type": "string"
+          },
+          "revokedAt": {
+            "type": "string"
+          },
+          "revokedByIp": {
+            "type": "string"
+          },
+          "replacedBy": {
+            "type": "string"
+          }
+        },
+        "description": "Refresh token model"
+      },
+      "PasswordResetToken": {
+        "description": "Password reset token model"
+      },
+      "History_date": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

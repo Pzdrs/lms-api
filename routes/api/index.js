@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const utils = require('../../helpers/utils');
+const docs = require('../../public/api-docs.json');
 
 const Book = require('../../models/Book');
 const User = require('../../models/User');
@@ -20,8 +21,8 @@ router.use('/books', booksRouter);
 router.use('/history', historyRouter);
 router.use('/authors', authorsRouter);
 
-router.get('/', (req, res, next) => {
-    res.send('THE API');
+router.get('/', (req, res) => {
+    res.status(200).json(docs);
 });
 
 router.get('/statistics', async (req, res, next) => {
