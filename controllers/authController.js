@@ -6,10 +6,6 @@ const {createToken, createRefreshToken} = require('../helpers/tokens');
 const {sendPassResetEmail} = require('../helpers/mail');
 const {nanoid} = require('nanoid');
 
-exports.loggedIn = (req, res) => {
-    res.status(200).json({loggedIn: true});
-};
-
 // Create new access token
 exports.refresh_token = async (req, res) => {
     // Is refresh token cookie present?

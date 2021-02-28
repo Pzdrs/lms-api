@@ -11,10 +11,10 @@ const booksRouter = require('./books');
 const historyRouter = require('./history');
 const authorsRouter = require('./authors');
 
-const {requireLoggedIn} = require('../../middleware/authentication');
+const {requireLoggedIn, requireAdmin} = require('../../middleware/authentication');
 
 // Sub routes
-router.use('/users', requireLoggedIn, usersRouter);
+router.use('/users', requireLoggedIn, requireAdmin, usersRouter);
 router.use('/auth', authRouter);
 router.use('/books', booksRouter);
 router.use('/history', historyRouter);

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {body} = require('express-validator');
 const controller = require('../../controllers/bookController');
-const {requireLoggedIn} = require('../../middleware/authentication');
+const {requireLoggedIn, requireAdmin} = require('../../middleware/authentication');
 
 
 // Get all books
@@ -16,7 +16,7 @@ router.get('/:id', controller.get_book);
 router.get('/:id/extended', controller.get_book_extended);
 
 // Create book
-router.post('/', requireLoggedIn, [
+router.post('/', requireLoggedIn, requireAdmin, [
     body('title', 'You must provide the title').isString(),
     body('isbn', 'You must provide the ISBN').isString(),
     body('author', 'You must provide the author (as an ObjectId)').isMongoId(),
@@ -25,9 +25,9 @@ router.post('/', requireLoggedIn, [
 ], controller.create_book);
 
 // Update book
-router.patch('/:id', requireLoggedIn, controller.update_book);
+router.patch('/:id', requireLoggedIn, requireAdmin, controller.update_book);
 
 // Delete book
-router.delete('/:id', requireLoggedIn, controller.delete_book);
+router.delete('/:id', requireLoggedIn, requireAdmin, controller.delete_book);
 
 module.exports = router;
