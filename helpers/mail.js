@@ -17,6 +17,6 @@ exports.sendPassResetEmail = (to, token) => {
             from: 'admin.lms@post.cz',
             to,
             subject: 'Forgotten password',
-            html: `Click here to reset your password: <a href="${path}/forgot-password?t=${token}">localhost:8080/forgot-password?t=${token}</a>. You have 15 minutes to do so.`
+            html: `Click here to reset your password: <a href="${path}/forgot-password?t=${token}">Take me there</a>. You have 15 minutes to do so.`
         });
 };
