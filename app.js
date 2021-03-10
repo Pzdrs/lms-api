@@ -32,7 +32,7 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static('public'));
+app.use(express.static('public/dist'));
 
 // Routes
 app.use('/api', apiRouter);
