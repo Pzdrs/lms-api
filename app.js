@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
+const history = require("connect-history-api-fallback");
 
 require('dotenv').config();
 
@@ -31,6 +32,7 @@ app.use(cors({origin: true, credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(history());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public/dist'));
 
