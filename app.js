@@ -34,7 +34,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(history());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static('public/dist'));
+app.use(express.static('public'));
 
 // Routes
 app.use('/api', apiRouter);
