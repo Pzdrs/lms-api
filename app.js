@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const history = require("connect-history-api-fallback");
 
 require('dotenv').config();
 
@@ -32,12 +31,11 @@ app.use(cors({origin: true, credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(history());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static('public/dist'));
+app.use(express.static('public'));
 
 // Routes
-app.use(process.env.NODE_ENV === 'development' ? '/api' : '/', apiRouter);
+app.use('/', apiRouter);
 
 app.use(notFound);
 app.use(handleError);

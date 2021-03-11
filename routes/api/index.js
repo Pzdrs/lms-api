@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const utils = require('../../helpers/utils');
-const docs = require('../../public/api-docs.json');
+const docs = require('../../public/docs.json');
 
 const Book = require('../../models/Book');
 const User = require('../../models/User');
