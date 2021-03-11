@@ -26,13 +26,7 @@ mongoose.connect(process.env.MONGO_CONNECT, {
         console.log(err);
     });
 
-// Middleware
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://api-lms-maturita.herokuapp.com");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-app.use(cors({origin: 'https://api-lms-maturita.herokuapp.com', credentials: true}));
+app.use(cors({origin: 'https://lms-maturita.herokuapp.com', credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
