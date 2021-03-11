@@ -60,7 +60,7 @@ exports.login = async (req, res) => {
     }
     res
         .status(200)
-        .cookie('refresh_token', await createRefreshToken(req, user.id), {httpOnly: true})
+        .cookie('refresh_token', await createRefreshToken(req, user.id), {httpOnly: true, secure: true})
         .json({
             success: true,
             message: `Welcome back, ${user.username}.`,
