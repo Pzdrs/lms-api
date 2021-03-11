@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGO_CONNECT, {
     });
 
 // Middleware
-app.use(cors({origin: true, credentials: true}));
+app.use(cors({origin: 'https://api-lms-maturita.herokuapp.com', credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
