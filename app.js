@@ -37,7 +37,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.static('public/dist'));
 
 // Routes
-app.use('/api', apiRouter);
+app.use(process.env.NODE_ENV === 'development' ? '/api' : '/', apiRouter);
 
 app.use(notFound);
 app.use(handleError);
