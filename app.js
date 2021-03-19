@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_CONNECT, {
         console.log(err);
     });
 
-app.use(cors({origin: 'https://lms-maturita.herokuapp.com', credentials: true}));
+app.use(cors({origin: 'https://pycrs.rocks', credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
