@@ -34,11 +34,10 @@ exports.refresh_token = async (req, res) => {
 exports.signup = async (req, res) => {
     // Create a new user
     const user = await User.findOne({username: req.body.username});
-    console.log(user)
     if (user) return res.status(409).json({success: false, message: 'This username is not available.'})
     await User.create({
         username: req.body.username,
-        password: req.body.password,
+        password: await bcrypt.hash(req.body.password, 10),
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName

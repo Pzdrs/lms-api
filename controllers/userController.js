@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const History = require('../models/History');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 // Get all users
 exports.users_get = async (req, res) => {
@@ -38,8 +39,9 @@ exports.user_patch = async (req, res) => {
             user.firstName = req.body.firstName;
         if (req.body.lastName)
             user.lastName = req.body.lastName;
-        if (req.body.password)
-            user.password = req.body.password;
+        if (req.body.password) {
+            user.password = await bcrypt.hash(req.body.password, 10);
+        }
         await user.save();
         res.status(200).json({success: true, user});
     } catch (err) {
