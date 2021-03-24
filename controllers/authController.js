@@ -124,7 +124,7 @@ exports.reset_password = async (req, res) => {
         if (token) {
             await PasswordResetToken.findByIdAndDelete(token._id);
             let user = await User.findOne({email: token.email});
-            user.password = req.body.password;
+            user.password = await bcrypt.hash(req.body.password, 10);
             await user.save();
         } else {
             return res.status(500).json({success: false, message: 'Invalid reset token.'})

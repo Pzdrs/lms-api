@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
@@ -28,15 +27,17 @@ mongoose.connect(process.env.MONGO_CONNECT, {
         console.log(err);
     });
 
-app.use(cors({origin: 'https://www.pycrs.rocks', credentials: true}));
+const app = express();
+
+// Routes
+app.use('/', apiRouter);
+
+app.use(cors({origin: 'https://www.pycrs.tech', credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'));
-
-// Routes
-app.use('/', apiRouter);
 
 app.use(notFound);
 app.use(handleError);
