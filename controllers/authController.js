@@ -73,7 +73,7 @@ exports.logout = async (req, res) => {
     if (!req.cookies.refresh_token) return res.status(400).json({success: false, message: 'Refresh token not found.'});
     try {
         res.status(200)
-            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true})
+            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true, secure: true})
             .json({
                 success: true,
                 message: 'Successfully logged out.'
@@ -89,7 +89,7 @@ exports.logoutAll = async (req, res) => {
     try {
         const tokens = await RefreshToken.deleteMany({user: req.params.user});
         res.status(200)
-            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true})
+            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true, secure: true})
             .json({
                 success: true,
                 message: `Successfully logged out ${tokens.length} devices.`
