@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
 
-require('dotenv').config();
+require('dotenv').config({
+    path: ".env"
+});
 
 const {notFound, handleError} = require('./middleware');
 
@@ -39,4 +41,6 @@ app.use('/', apiRouter);
 app.use(notFound);
 app.use(handleError);
 
-module.exports = app;
+app.listen(3000, () => {
+    console.log("Listening on port 3000")
+})
