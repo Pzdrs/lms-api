@@ -8,6 +8,7 @@ const {nanoid} = require('nanoid');
 
 // Create new access token
 exports.refresh_token = async (req, res) => {
+    console.log(req.cookies)
     // Is refresh token cookie present?
     if (!req.cookies.refresh_token) return res.status(400).json({success: false, message: 'Refresh token not found.'})
     try {

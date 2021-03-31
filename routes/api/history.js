@@ -13,7 +13,7 @@ router.get('/:id', controller.history_details_get);
 router.get('/:id/extended', controller.history_details_extended_get);
 
 // Create a history
-router.post('/', requireLoggedIn, requireAdmin, controller.history_post);
+router.post('/', requireLoggedIn, controller.history_post);
 
 // Edit a history
 router.patch('/:id', requireLoggedIn, requireAdmin, controller.history_patch);
