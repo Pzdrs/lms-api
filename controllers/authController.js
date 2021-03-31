@@ -49,6 +49,7 @@ exports.signup = async (req, res) => {
 
 // Log in user
 exports.login = async (req, res) => {
+    console.log(req.body)
     const user = await User.findOne().or([{username: req.body.username}, {email: req.body.username}]);
     // Does user exist?
     if (!user) return res.status(401).json({success: false, message: 'There is no user with that username or email.'})
@@ -57,9 +58,14 @@ exports.login = async (req, res) => {
     if (!await bcrypt.compare(req.body.password, user.password)) {
         return res.status(401).json({success: false, message: 'The specified password is invalid.'});
     }
+    let date = new Date();
+    date.setDate(date.getDate() + 5);
     res
         .status(200)
-        .cookie('refresh_token', await createRefreshToken(req, user.id), {httpOnly: true, secure: true})
+        .cookie('refresh_token', await createRefreshToken(req, user.id), {
+            httpOnly: true,
+            expires: date
+        })
         .json({
             success: true,
             message: `Welcome back, ${user.username}.`,
@@ -73,7 +79,7 @@ exports.logout = async (req, res) => {
     if (!req.cookies.refresh_token) return res.status(400).json({success: false, message: 'Refresh token not found.'});
     try {
         res.status(200)
-            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true, secure: true})
+            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true})
             .json({
                 success: true,
                 message: 'Successfully logged out.'
@@ -89,7 +95,7 @@ exports.logoutAll = async (req, res) => {
     try {
         const tokens = await RefreshToken.deleteMany({user: req.params.user});
         res.status(200)
-            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true, secure: true})
+            .cookie('refresh_token', 'asdf', {maxAge: 0, httpOnly: true})
             .json({
                 success: true,
                 message: `Successfully logged out ${tokens.length} devices.`

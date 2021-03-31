@@ -30,18 +30,17 @@ mongoose.connect(process.env.MONGO_CONNECT, {
 const app = express();
 
 // Routes
-app.use('/', apiRouter);
 
-app.use(cors({origin: 'https://www.pycrs.tech', credentials: true}));
+app.use(cors({origin: 'http://localhost:8080', credentials: true}));
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(express.static('public'));
 
+app.use('/', apiRouter);
+
 app.use(notFound);
 app.use(handleError);
 
-app.listen(3000, () => {
-    console.log("Listening on port 3000")
-})
+module.exports = app;
